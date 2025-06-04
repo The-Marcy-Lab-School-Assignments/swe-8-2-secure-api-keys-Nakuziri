@@ -9,32 +9,31 @@ function GifContainer() {
         const doFetch = async () => {
             const [data, error] = await getTrendingGifs();
             if (error) {
-                return setError(error);
+                setError(error);
+            } else {
+                setGifs(data.data);
             }
-            setGifs(data.data);
-        }
+        };
         doFetch();
     }, []);
 
-    if (!gifs) {
+    if (error) {
         return (
             <div>
                 <h3>Sorry, we couldn't fetch the gifs at this time.</h3>
-            </div >
-        )
+            </div>
+        );
     }
 
     return (
         <ul>
-            {
-                gifs.map((gif) => {
-                    return <li key={gif.id}>
-                        <img src={gif.images.original.url} alt="" />
-                    </li>
-                })
-            }
+            {gifs.map((gif) => (
+                <li key={gif.id}>
+                    <img src={gif.images.original.url} alt={gif.title || 'GIF'} />
+                </li>
+            ))}
         </ul>
-    )
+    );
 }
 
-export default GifContainer
+export default GifContainer;
